@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+
+    <style>
+      
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Fondo con gradiente */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffffff, #ffffff);
+}
+
+/* Contenedor principal */
+.container {
+    background: rgb(203, 201, 201);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+/* Título */
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Botones */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #000000;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  
+}
+
+button:hover {
+    background-color: #4296f0;
+}
+
+/* Enlace para cambiar entre login y registro */
+.toggle-link {
+    margin-top: 15px;
+    display: block;
+    color: #007BFF;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.toggle-link:hover {
+    text-decoration: underline;
+}
+
+/* Ocultar formularios */
+.hidden {
+    display: none;
+}
+
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h2 id="form-title">Iniciar Sesión</h2>
+        <br>
+        <!-- Formulario de Login -->
+        <form id="login-form" onsubmit="login(event)">
+            <input type="text" id="username" placeholder="Usuario" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Iniciar sesión</button>
+        </form>
+       
+    
+        <!-- Formulario de Registro -->
+        <form id="register-form" class="hidden" onsubmit="register(event)">
+            <input type="text" id="register-username" placeholder="Nuevo usuario" required>
+            <input type="password" id="register-password" placeholder="Nueva contraseña" required>
+            <button type="submit">Registrarse</button>
+        </form>
+
+        <p id="register-message" style="color: green; font-weight: bold; display: none;"></p>
+
+        <!-- Botón para cambiar entre login y registro -->
+        <span class="toggle-link" onclick="toggleForm()">¿No tienes cuenta? Regístrate aquí</span>
+       
+    </div>
+    
+</body>
+<script>
+    function toggleForm() {
+        let loginForm = document.getElementById("login-form");
+        let registerForm = document.getElementById("register-form");
+        let titulo = document.getElementById("titulo");
+        let buttonText = document.querySelector("button[onclick='toggleForm()']");
+
+        if (loginForm.classList.contains("hidden")) {
+            loginForm.classList.remove("hidden");
+            registerForm.classList.add("hidden");
+            titulo.innerText = "Iniciar sesión";
+            buttonText.innerText = "¿No tienes cuenta? Regístrate";
+        } else {
+            loginForm.classList.add("hidden");
+            registerForm.classList.remove("hidden");
+            titulo.innerText = "Registrarse";
+            buttonText.innerText = "¿Ya tienes cuenta? Inicia sesión";
+        }
+    }
+
+    function login(event) {
+        event.preventDefault();
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        let messageElement = document.getElementById("register-message"); // Obtener el mensaje
+
+        fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: username, password: password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Acceso permitido") {
+                window.location.href = "/";  // Redirigir a la página principal
+            } else {
+                messageElement.style.color = "green"; // Color rojo para éxito
+                messageElement.textContent = "Datos incorrectos.";
+                messageElement.style.display = "block"; // Muestra el mensaje
+            setTimeout(() => {
+                messageElement.style.display = "none"; // Ocultar después de 3s
+                toggleForm(); // Cambiar a formulario de login
+            }, 3000);
+            }
+        });
+    }
+
+   
+
+    function register(event) {
+        event.preventDefault();
+        let username = document.getElementById("register-username").value;
+        let password = document.getElementById("register-password").value;
+        let messageElement = document.getElementById("register-message"); // Obtener el mensaje
+
+        fetch("/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: username, password: password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Usuario registrado exitosamente") {
+                messageElement.style.color = "green"; // Color verde para éxito
+                messageElement.textContent = "Registro exitoso. Ahora inicia sesión.";
+                messageElement.style.display = "block"; // Muestra el mensaje
+            setTimeout(() => {
+                messageElement.style.display = "none"; // Ocultar después de 3s
+                toggleForm(); // Cambiar a formulario de login
+            }, 3000);
+            } else {
+                messageElement.style.color = "red"; // Color rojo para error
+                messageElement.textContent = data.error || "Error al registrar";
+                messageElement.style.display = "block";
+            }
+        });
+    }
+</script>
+</html>

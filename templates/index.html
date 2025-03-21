@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #ffffff;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            padding: 50px;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        form {
+            margin-bottom: 30px;
+            margin-left: 105px;
+
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            padding-left: -10px;
+            
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            padding: 10px;
+            border: 2px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #000000;
+            color: white;
+        }
+
+        #fecha{
+            margin-right: 100px;
+        }
+
+        #botonSalir{
+            margin-left: 1350px;
+           
+            padding-right: 50px;
+            padding-left: 40px;
+            background-color: #a5a6a8;
+           
+            border: none;
+            color: rgb(0, 0, 0);
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+                    
+          
+        }
+    </style>
+</head>
+<body>
+    <h2>NIVELES PIEZOMETRICOS</h2>
+    <form onsubmit="buscar(event)">
+        Fecha: <input type="date" id="fecha" required>
+        Municipio: <input type="text" id="municipio" required>
+        <button type="submit">Buscar</button>
+    </form>
+    
+    <!-- Tabla de Resultados -->
+    
+
+    <table id="tabla">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Municipio</th>
+                <th>Nombre Pozo</th>
+                <th>Nivel Dinámico</th>
+                <th>Nivel Estático</th>
+                <th>Coordenadas</th>
+                <th>Brocal/Manguera</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        
+    </table>
+     <!-- Botón de salir -->
+     <button onclick="logout()" id="botonSalir">Salir</button>
+
+    
+    <script>
+        function logout() {
+            fetch("/logout")
+                .then(() => {
+                    window.location.href = "/login_form";  // Redirigimos al login
+                });
+        }
+
+        function buscar(event) {
+    event.preventDefault();
+    let fecha = document.getElementById("fecha").value;
+    let municipio = document.getElementById("municipio").value;
+
+    fetch(`/buscar?fecha=${fecha}&municipio=${municipio}`)
+        .then(response => {
+            if (!response.ok) {
+                if(response.status===401){
+                    window.location.href = "/login_form"; // Redirige si no está autenticado
+                }
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            return response.json();  // Intenta parsear como JSON
+        })
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                if (data.error === "No autenticado") {
+                    window.location.href = "/login_form";  // Redirige al login
+                }
+                return;
+            }
+
+            let tbody = document.querySelector("#tabla tbody");
+            tbody.innerHTML = ""; // Limpiar la tabla
+
+            let resultados = [...data.SFR, ...data.calvillo, ...data.asientos, ...data.llano, ...data.sjg];
+
+            if (resultados.length === 0) {
+                let tr = document.createElement("tr");
+                tr.innerHTML = "<td colspan='8'>No se encontraron resultados</td>";
+                tbody.appendChild(tr);
+                return;
+            }
+
+            resultados.forEach(row => {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${row.fecha.substring(0, 10)}</td>
+                    <td>${row.municipio}</td>
+                    <td>${row.nombre_pozo}</td>
+                    <td>${row.nivel_dinamico || "N/A"}</td>
+                    <td>${row.nivel_estatico || "N/A"}</td>
+                    <td>${row.coordenada_x}, ${row.coordenada_y}, ${row.coordenada_z}</td>
+                    <td>${row.brocal_manguera}</td>
+                    <td>${row.observaciones}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(error => {
+            console.error("Error en la solicitud:", error);
+            alert("Hubo un problema al obtener los datos. Verifica que estés autenticado.");
+        });
+}
+
+        
+    </script>
+</body>
+</html>
