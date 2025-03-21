@@ -1,0 +1,20 @@
+{
+  "apps": [
+    {
+      "app_id": "app_2040cc85-38e9-4105-bccb-75c77aafc50a",
+      "org_id": "user_4a60751c-3347-49c8-9b37-f2b76ffc426d",
+      "deploy_url": "https://push-n3-par-clevercloud-customers.services.clever-cloud.com/app_2040cc85-38e9-4105-bccb-75c77aafc50a.git",
+      "git_ssh_url": "git+ssh://git@push-n3-par-clevercloud-customers.services.clever-cloud.com/app_2040cc85-38e9-4105-bccb-75c77aafc50a.git",
+      "name": "baseinagua",
+      "alias": "baseinagua"
+    },
+    {
+      "app_id": "app_3a6e391e-2d0d-40d7-a809-be85f808f68b",
+      "org_id": "user_4a60751c-3347-49c8-9b37-f2b76ffc426d",
+      "deploy_url": "https://push-n3-par-clevercloud-customers.services.clever-cloud.com/app_3a6e391e-2d0d-40d7-a809-be85f808f68b.git",
+      "git_ssh_url": "git+ssh://git@push-n3-par-clevercloud-customers.services.clever-cloud.com/app_3a6e391e-2d0d-40d7-a809-be85f808f68b.git",
+      "name": "inagua",
+      "alias": "inagua"
+    }
+  ]
+}
