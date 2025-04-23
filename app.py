@@ -143,22 +143,19 @@ def buscar():
         cur.execute(query_jesusMaria, (fecha, municipio))
         resultados_jesusMaria = cur.fetchall()
 
-
-
         cur.close()
 
         return jsonify({
             "calvillo": resultados_calvillo,
             "SFR": resultados_sfr,
             "asientos": resultados_asientos,
+
             #aqui se inicia las otras dos tablas o las tablas restantes 
             "llano": resultados_llano,
             "sjg": resultados_sjg,
             "aguascalientes": resultados_aguascalientes,
             "tepezala": resultados_tepezala,
-            #rinconRomos
             "rinconRomos":resultados_rinconRomos,
-            #cosio
             "cosio": resultados_cosio,
             "pabellonArteaga":resultados_pabellonArteaga,
             "jesusMaria": resultados_jesusMaria
