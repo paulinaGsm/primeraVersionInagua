@@ -82,7 +82,8 @@
                 <th>Nombre Pozo</th>
                 <th>Nivel Dinámico</th>
                 <th>Nivel Estático</th>
-                <th>Coordenadas</th>
+                <th>Dinamico Estatico</th>
+                <th>Coordenadas (x,y,z)</th>
                 <th>Brocal/Manguera</th>
                 <th>Observaciones</th>
             </tr>
@@ -148,6 +149,7 @@
                     <td>${row.nombre_pozo}</td>
                     <td>${row.nivel_dinamico || "N/A"}</td>
                     <td>${row.nivel_estatico || "N/A"}</td>
+                    <td>${row.dinamico_estatico || "N/A"}</td>
                     <td>${row.coordenada_x}, ${row.coordenada_y}, ${row.coordenada_z}</td>
                     <td>${row.brocal_manguera}</td>
                     <td>${row.observaciones}</td>
