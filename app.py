@@ -119,6 +119,32 @@ def buscar():
         cur.execute(query_sjg, (fecha, municipio))
         resultados_sjg = cur.fetchall()
 
+        query_aguascalientes = "SELECT * FROM aguascalientes WHERE fecha = %s AND municipio = %s"
+        cur.execute(query_aguascalientes, (fecha, municipio))
+        resultados_aguascalientes = cur.fetchall()
+
+        query_tepezala= "SELECT * FROM tepezala WHERE fecha = %s AND municipio = %s"
+        cur.execute(query_tepezala, (fecha, municipio))
+        resultados_tepezala = cur.fetchall()
+
+        query_rinconRomos= "SELECT * FROM rinconRomos WHERE fecha = %s AND municipio = %s"
+        cur.execute(query_rinconRomos, (fecha, municipio))
+        resultados_rinconRomos = cur.fetchall()
+
+        query_cosio= "SELECT * FROM cosio WHERE fecha = %s AND municipio = %s"
+        cur.execute(query_cosio, (fecha, municipio))
+        resultados_cosio = cur.fetchall()
+
+        query_pabellonArteaga= "SELECT * FROM pabellonArteaga WHERE fecha = %s AND municipio = %s"
+        cur.execute(query_pabellonArteaga, (fecha, municipio))
+        resultados_pabellonArteaga = cur.fetchall()
+
+        query_jesusMaria= "SELECT * FROM jesusMaria WHERE fecha = %s AND municipio = %s"
+        cur.execute(query_jesusMaria, (fecha, municipio))
+        resultados_jesusMaria = cur.fetchall()
+
+
+
         cur.close()
 
         return jsonify({
@@ -127,7 +153,15 @@ def buscar():
             "asientos": resultados_asientos,
             #aqui se inicia las otras dos tablas o las tablas restantes 
             "llano": resultados_llano,
-            "sjg": resultados_sjg
+            "sjg": resultados_sjg,
+            "aguascalientes": resultados_aguascalientes,
+            "tepezala": resultados_tepezala,
+            #rinconRomos
+            "rinconRomos":resultados_rinconRomos,
+            #cosio
+            "cosio": resultados_cosio,
+            "pabellonArteaga":resultados_pabellonArteaga,
+            "jesusMaria": resultados_jesusMaria
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Captura errores y devuelve JSON

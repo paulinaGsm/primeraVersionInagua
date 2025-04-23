@@ -129,7 +129,9 @@
             let tbody = document.querySelector("#tabla tbody");
             tbody.innerHTML = ""; // Limpiar la tabla
 
-            let resultados = [...data.SFR, ...data.calvillo, ...data.asientos, ...data.llano, ...data.sjg];
+            let resultados = [...data.SFR, ...data.calvillo, ...data.asientos, ...data.llano, ...data.sjg, ...data.aguascalientes, ...data.tepezala, ...data.rinconRomos, ...data.cosio,
+                ...data.pabellonArteaga, ...data.jesusMaria
+            ];
 
             if (resultados.length === 0) {
                 let tr = document.createElement("tr");
